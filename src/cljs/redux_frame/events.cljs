@@ -1,10 +1,16 @@
 (ns redux-frame.events
   (:require
-   [re-frame.core :as re-frame]
-   [redux-frame.db :as db]))
+    [redux-frame.helpers :refer [reg-event-db]]
+    [redux-frame.db :as db]))
 
-
-(re-frame/reg-event-db
+(reg-event-db
  ::initialize-db
  (fn [_ _]
    db/default-db))
+
+(reg-event-db
+  ::add-number
+  (fn [db [_ new-number]]
+    (let [old-numbers (:numbers db)
+          new-numbers (set (conj old-numbers new-number))]
+      (assoc db :numbers new-numbers))))
